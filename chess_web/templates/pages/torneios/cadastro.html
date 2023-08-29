@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block 'titulo' %}
+<h1>Cadastro de Torneios</h1>
+{% endblock %}
+
+{% block 'conteudo' %}
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label>Nome:</label>
+        {{frm.nome|add_class:'form-control'}}
+    </div>
+
+    <div class="form-group">
+        <label>Local:</label>
+        {{frm.local|add_class:'form-control'}}
+    </div>
+
+    <div class="form-group">
+        <label>Data:</label>
+        {{frm.data|add_class:'form-control'|attr:"type:date"}}
+    </div>
+
+    <div class="form-group">
+        <label for="organizacao">Organizacao:</label>
+        {{frm.organizacao|add_class:'form-control'}}
+    </div>
+
+    <div class="form-group">
+        <label>Prêmio do 1° colocado:</label>
+        {{frm.premio_primeiro|add_class:'form-control'}}
+    </div>
+
+    <div class="form-group">
+        <label>Prêmio do 2° colocado:</label>
+        {{frm.premio_segundo|add_class:'form-control'}}
+    </div>
+
+    <div class="form-group">
+        <label>Prêmio do 3° colocado:</label>
+        {{frm.premio_terceiro|add_class:'form-control'}}
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">
+            <i class="fa-sharp fa-light fa-plus"></i> Enviar cadastro
+        </button>
+    </div>
+    
+</form>
+
+{% endblock %}

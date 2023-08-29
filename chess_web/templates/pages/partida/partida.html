@@ -1,0 +1,44 @@
+{% extends  'base.html' %}
+
+{% block 'conteudo'%}
+<h1>{{titulo}}</h1>
+
+<p>
+    <a href="{% url 'partida_adicionarPartida' %}" class="btn btn-primary">
+        Adicionar
+    </a>
+</p>
+<table class="table table-hover">
+    <tr>
+        <th>Usuario_B</th>
+        <th>Usuario_P</th>
+        <th>Torneio</th>
+        <th>Data Partida</th>
+        <th>Rodada</th>
+        <th>Editar</th>
+        <th>Excluir</th>
+    </tr>
+
+    {% for p in partida %}
+        <tr>
+            <td>{{p.usuario_branca}}</td>
+            <td>{{p.usuario_preta}}</td>
+            <td>{{p.torneio}}</td>
+            <td>{{p.data_partida}}</td>
+            <td>{{p.rodada}}</td>
+
+            <td>
+                <a href="{% url 'partida_EditarPartida' p.id %}" class="btn btn-warning">
+                    <i class="fa-solid fa-edit"></i>
+                </a>
+            </td>
+            <td>
+                <a href="{% url 'partida_ExcluirPartida' p.id %}" class="btn btn-danger" onclick="return confirm('Deseja excluir {{p.nome}}?')">
+                    <i class="fa-sharp fa-regular fa-circle-xmark"></i>
+            </td>
+
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{%endblock%}

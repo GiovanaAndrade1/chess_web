@@ -1,0 +1,66 @@
+{% extends 'base.html'%}
+{% load widget_tweaks %}
+
+{% block 'titulo'%}
+<p> 
+    <h1>{{titulo}}</h1>
+</p>
+{%endblock%}
+{%block 'conteudo'%}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Nome: </label>
+            {{frm.nome|add_class:'form-control'}}
+        </div>
+
+        <div class="form-group">
+            <label>Email: </label>
+            {{frm.email|add_class:'form-control'}}
+        </div>
+        <p>
+        <h6> É administrador? </h6>
+        </p>
+        <div class="form-check form-switch">
+            <label >{{frm.admin|add_class:'form-check-input'|attr:"checkbox" }}</label> 
+        </div>
+
+        <div class="form-group">
+            <label >Senha: </label>
+            {{frm.password|add_class:'form-control'|attr:"type:password" }}
+        </div>
+
+        <div class="form-group">
+            <label>Descrição:</label>
+            {{frm.descricao|attr:'blank=false'|add_class:'form-control' }}
+        </div>
+
+        <div class="form-group">
+            <label>Istagram:</label>
+            {{frm.instagram|attr:'blank=false'|add_class:'form-control'}}
+        </div>
+
+        <div class="form-group">
+            <label>Facebook:</label>
+            {{frm.facebook|attr:'blank=false'|add_class:'form-control'}}
+        </div>
+
+        <div class="form-group">
+            <label>Twitter:</label>
+            {{frm.twitter|attr:'blank=false'|add_class:'form-control'}}
+        </div>
+
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Confimar
+            </button>
+            <a href="{% url 'usuarios_lista' %}" class="btn btn-primary">
+                <i class="fa-sharp fa-regular fa-circle-left"></i> Voltar
+            </a>
+        </div>
+    </form>
+{%endblock%}
+<!-- depois que cadastrar irá redirecionar automáticamente para pag de usuário->>
