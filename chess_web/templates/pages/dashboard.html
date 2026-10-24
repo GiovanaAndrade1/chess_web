@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
-
-{% block 'titulo' %}Dashboard{% endblock %}
-
+{% block 'titulo' %}<h1>Dashboard</h1>{% endblock %}
 {% block 'conteudo' %}
-    Dashboard
+<div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="card card-body"><h2 class="h5">Usuários</h2><strong class="fs-2">{{ total_usuarios }}</strong></div></div>
+    <div class="col-md-4"><div class="card card-body"><h2 class="h5">Torneios</h2><strong class="fs-2">{{ total_torneios }}</strong></div></div>
+    <div class="col-md-4"><div class="card card-body"><h2 class="h5">Partidas</h2><strong class="fs-2">{{ total_partidas }}</strong></div></div>
+</div>
+<h2 class="h4">Últimas partidas</h2>
+<div class="table-responsive"><table class="table"><thead><tr><th>Brancas</th><th>Pretas</th><th>Torneio</th><th>Data</th><th>Vencedor</th></tr></thead>
+<tbody>{% for partida in partidas %}<tr><td>{{ partida.usuario_branca }}</td><td>{{ partida.usuario_preta }}</td><td>{{ partida.Torneios }}</td><td>{{ partida.data_partida|date:'d/m/Y' }}</td><td>{{ partida.resultado_legivel }}</td></tr>{% empty %}<tr><td colspan="5">Nenhuma partida cadastrada.</td></tr>{% endfor %}</tbody></table></div>
 {% endblock %}

@@ -8,7 +8,7 @@
     <tr>
         <th>Nome</th>
         <th>Email</th>
-        <th>Adiministrador</th>
+        <th>Administrador</th>
         <th>Descrição</th>
         <th>Instagram</th>
         <th>Facebook</th>
@@ -27,7 +27,8 @@
 
 </table>
 
-<a href="{% url 'usuarios_lista' %}" class="btn btn-primary">
+<a href="{% url 'usuarios_editar' usuario.pk %}" class="btn btn-primary">Editar perfil</a>
+<a href="{% url 'inicio' %}" class="btn btn-primary">
     <i class="fa-sharp fa-regular fa-circle-left"></i> Voltar
 </a> 
 

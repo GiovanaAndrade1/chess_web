@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block 'titulo' %}<h1>Criar conta</h1>{% endblock %}
+{% block 'conteudo' %}
+<p>Cadastre-se para gerenciar torneios e registrar partidas.</p>
+<form method="post" class="formulario">
+    {% csrf_token %}
+    {{ frm.non_field_errors }}
+    {% for campo in frm %}
+    <div class="mb-3">{{ campo.label_tag }}{{ campo|add_class:'form-control' }}{{ campo.errors }}</div>
+    {% endfor %}
+    <p class="text-muted">Use pelo menos 8 caracteres. Evite senhas comuns, somente números ou semelhantes ao seu nome.</p>
+    <button type="submit" class="btn btn-primary">Criar conta</button>
+    <a href="{% url 'login' %}" class="btn btn-secondary">Já tenho conta</a>
+</form>
+{% endblock %}

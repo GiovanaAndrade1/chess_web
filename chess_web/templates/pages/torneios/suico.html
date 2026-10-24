@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block 'titulo' %}<h1>{{ torneio.nome }} — Sistema suíço</h1>{% endblock %}
+{% block 'conteudo' %}
+<a href="{% url 'torneios_ListaTorneios' %}" class="btn btn-secondary mb-3">Voltar aos torneios</a>
+<p>Vitória: 1 ponto · Empate: ½ ponto · Derrota: 0 · Folga: 1 ponto, no máximo uma por pessoa.</p>
+<p>Pareamento suíço local: prioriza pontuações próximas, evita adversários repetidos e limita a diferença entre cores a 2, sem três cores iguais seguidas. A primeira rodada cruza as duas metades da ordem inicial. Esta implementação não equivale ao sistema holandês oficial da FIDE.</p>
+{% if not rodada_atual %}
+<section class="card card-body mb-4"><h2 class="h4">1. Participantes</h2>
+<p>Selecione os usuários que jogarão este torneio. A ordem inicial segue o número de cadastro no sistema, sem rating. As inscrições fecham ao gerar a primeira rodada.</p>
+<form method="post">{% csrf_token %}<input type="hidden" name="acao" value="inscricoes">{{ inscricoes.as_p }}<button class="btn btn-primary" type="submit">Salvar participantes</button></form>
+</section>
+{% endif %}
+<section class="card card-body mb-4"><h2 class="h4">Rodadas: {{ rodada_atual }} de {{ limite }}</h2>
+<p>O limite considera o número de rodadas configurado e quantos adversários estão disponíveis.</p>
+{% if pode_gerar %}
+<form method="post">{% csrf_token %}<input type="hidden" name="acao" value="gerar">{{ gerar.as_p }}<button type="submit" class="btn btn-primary">Gerar próxima rodada</button></form>
+{% elif pendente %}<p>Registre todos os resultados da rodada atual para continuar.</p>
+{% elif not classificacao %}<p>Salve os participantes para começar.</p>
+{% else %}<p>Torneio concluído: limite de rodadas atingido.</p>{% endif %}
+{% if not pode_gerar %}{{ gerar.errors }}{% endif %}
+</section>
+<h2 class="h4">Classificação{% if pendente %} parcial{% endif %}</h2>
+<p>Desempates: Buchholz simples (soma dos pontos dos adversários reais, sem ajuste de folgas), vitórias e ordem inicial. Resultados pendentes não pontuam.</p>
+<div class="table-responsive"><table class="table"><thead><tr><th>Posição</th><th>Nº inicial</th><th>Nome</th><th>Pontos</th><th>Buchholz</th><th>Vitórias</th><th>Folgas</th></tr></thead><tbody>
+{% for j in classificacao %}<tr><td>{{ forloop.counter }}</td><td>{{ j.numero }}</td><td>{{ j.usuario.nome }}</td><td>{{ j.pontos }}</td><td>{{ j.buchholz }}</td><td>{{ j.vitorias }}</td><td>{{ j.folgas }}</td></tr>{% empty %}<tr><td colspan="7">Nenhum participante inscrito.</td></tr>{% endfor %}
+</tbody></table></div>
+{% for rodada in rodadas %}
+<section class="mb-4"><h2 class="h4">Rodada {{ rodada.numero }}</h2>
+{% if rodada.folga_id %}<p class="alert alert-info">Folga: {{ rodada.folga.nome }} — 1 ponto, sem adversário e sem cor.</p>{% endif %}
+<div class="table-responsive"><table class="table"><thead><tr><th>Mesa</th><th>Brancas</th><th>Pretas</th><th>Data</th><th>Resultado</th></tr></thead><tbody>
+{% for partida in rodada.partidas.all %}<tr><td>{{ forloop.counter }}</td><td>{{ partida.usuario_branca }}</td><td>{{ partida.usuario_preta }}</td><td>{{ partida.data_partida|date:'d/m/Y' }}</td><td>
+{% if rodada.numero == rodada_atual %}
+<form method="post" class="acoes">{% csrf_token %}<input type="hidden" name="acao" value="resultado"><input type="hidden" name="partida" value="{{ partida.pk }}">
+<label class="visually-hidden" for="resultado-{{ partida.pk }}">Resultado da mesa {{ forloop.counter }}</label>
+<select id="resultado-{{ partida.pk }}" name="resultado" class="form-select" required>
+<option value="">Pendente</option><option value="B" {% if partida.vencedor == 'B' %}selected{% endif %}>Vitória das brancas</option><option value="P" {% if partida.vencedor == 'P' %}selected{% endif %}>Vitória das pretas</option><option value="E" {% if partida.vencedor == 'E' %}selected{% endif %}>Empate</option></select><button class="btn btn-primary btn-sm" type="submit">Salvar resultado</button></form>
+{% else %}{{ partida.resultado_legivel }}{% endif %}
+</td></tr>{% endfor %}</tbody></table></div></section>
+{% endfor %}
+{% endblock %}

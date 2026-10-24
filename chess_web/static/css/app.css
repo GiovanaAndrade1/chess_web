@@ -1,12 +1,16 @@
-main {
-    display: flex;
-    flex-wrap: nowrap;
-    height: 100vh;
-    max-height: 100vh;
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
-content-container {
-    overflow-y: auto;
+body { margin: 0; background: #f5f6f8; color: #212529; }
+main { display: flex; min-height: 100vh; }
+.sidebar { width: 260px; flex-shrink: 0; }
+.content-container { padding: 2rem; min-width: 0; }
+.table { background: white; }
+.table td, .table th { vertical-align: middle; }
+.acoes { display: flex; gap: .5rem; flex-wrap: wrap; }
+form p { margin-bottom: 1rem; }
+.errorlist { color: #b02a37; }
+.formulario { max-width: 750px; }
+@media (max-width: 767px) {
+    main { flex-direction: column; }
+    .sidebar { width: 100%; }
+    .sidebar .nav { flex-direction: row !important; flex-wrap: wrap; }
+    .content-container { padding: 1rem; }
 }
