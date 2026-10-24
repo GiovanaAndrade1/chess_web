@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9p3fr&hkdlg0s^87^mo-zo=kurso+1(_81f7f2n4j%80do+g6n'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-local-chessmatch-development-only')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'true').lower() in ('1', 'true', 'yes')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [host.strip() for host in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,[::1]').split(',') if host.strip()]
 
 
 # Application definition
@@ -72,17 +73,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chess_web.wsgi.application'
 
-print(BASE_DIR / 'mysql.cnf')
+
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS':{
-            'read_default_file' : str(BASE_DIR / 'mysql.cnf')
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -130,3 +129,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'chess_web.Usuario'
 
 DATE_INPUT_FORMATS = ['%d %b %Y']
+if os.environ.get('CHESS_DATABASE', 'sqlite') == 'mysql':
+    import pymysql
+    pymysql.install_as_MySQLdb()
+    DATABASES = {'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {'read_default_file': str(BASE_DIR / 'mysql.cnf'), 'charset': 'utf8mb4'},
+    }}
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'inicio'
+LOGOUT_REDIRECT_URL = 'login'

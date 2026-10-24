@@ -3,6 +3,12 @@
 from django.db import migrations, models
 
 
+def preencher_perfil(apps, schema_editor):
+    Usuario = apps.get_model('chess_web', 'Usuario')
+    for campo in ('descricao', 'facebook', 'instagram', 'twitter'):
+        Usuario.objects.using(schema_editor.connection.alias).filter(**{campo + '__isnull': True}).update(**{campo: ''})
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -10,6 +16,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(preencher_perfil, migrations.RunPython.noop),
         migrations.CreateModel(
             name='Partida',
             fields=[

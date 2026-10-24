@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
                 ('nome', models.CharField(max_length=1000)),
-                ('email', models.EmailField(max_length=1000, unique=True)),
+                ('email', models.EmailField(max_length=254, unique=True)),
                 ('admin', models.BooleanField(verbose_name='Adminsitrador')),
             ],
             options={

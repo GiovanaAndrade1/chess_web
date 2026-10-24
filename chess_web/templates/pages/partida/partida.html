@@ -1,44 +1,8 @@
-{% extends  'base.html' %}
-
-{% block 'conteudo'%}
-<h1>{{titulo}}</h1>
-
-<p>
-    <a href="{% url 'partida_adicionarPartida' %}" class="btn btn-primary">
-        Adicionar
-    </a>
-</p>
-<table class="table table-hover">
-    <tr>
-        <th>Usuario_B</th>
-        <th>Usuario_P</th>
-        <th>Torneio</th>
-        <th>Data Partida</th>
-        <th>Rodada</th>
-        <th>Editar</th>
-        <th>Excluir</th>
-    </tr>
-
-    {% for p in partida %}
-        <tr>
-            <td>{{p.usuario_branca}}</td>
-            <td>{{p.usuario_preta}}</td>
-            <td>{{p.torneio}}</td>
-            <td>{{p.data_partida}}</td>
-            <td>{{p.rodada}}</td>
-
-            <td>
-                <a href="{% url 'partida_EditarPartida' p.id %}" class="btn btn-warning">
-                    <i class="fa-solid fa-edit"></i>
-                </a>
-            </td>
-            <td>
-                <a href="{% url 'partida_ExcluirPartida' p.id %}" class="btn btn-danger" onclick="return confirm('Deseja excluir {{p.nome}}?')">
-                    <i class="fa-sharp fa-regular fa-circle-xmark"></i>
-            </td>
-
-            </td>
-        </tr>
-    {% endfor %}
-</table>
-{%endblock%}
+{% extends 'base.html' %}
+{% block 'titulo' %}<h1>{{ titulo }}</h1>{% endblock %}
+{% block 'conteudo' %}
+<a class="btn btn-primary mb-3" href="{% url 'partida_adicionarPartida' %}">Adicionar</a>
+<div class="table-responsive"><table class="table table-hover"><thead><tr><th>Brancas</th><th>Pretas</th><th>Torneio</th><th>Vencedor</th><th>Data</th><th>Rodada</th><th>Ações</th></tr></thead><tbody>
+{% for item in partida %}<tr><td>{{ item.usuario_branca }}</td><td>{{ item.usuario_preta }}</td><td>{{ item.Torneios }}</td><td>{{ item.resultado_legivel }}</td><td>{{ item.data_partida }}</td><td>{{ item.rodada }}</td><td><div class="acoes">{% if item.rodada_suica_id %}<a class="btn btn-sm btn-primary" href="{% url 'torneios_suico' item.Torneios_id %}">Resultado / Torneio</a>{% else %}<a class="btn btn-sm btn-secondary" href="{% url 'partida_EditarPartida' item.pk %}">Editar</a><form method="post" action="{% url 'partida_ExcluirPartida' item.pk %}" onsubmit="return confirm('Confirmar exclusão? Os registros vinculados também poderão ser excluídos.')">{% csrf_token %}<button class="btn btn-sm btn-danger" type="submit">Excluir</button></form>{% endif %}</div></td></tr>
+{% empty %}<tr><td colspan="7">Nenhum registro cadastrado.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

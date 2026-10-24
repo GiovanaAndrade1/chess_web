@@ -1,15 +1,22 @@
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from chess_web.views import pages, torneios, usuario, partida
 #from chess_web import usuario
 
 urlpatterns = [
-    path('dashboard', pages.dashboard, name='dashboard'), 
+    path('', pages.dashboard, name='inicio'),
+    path('dashboard', pages.dashboard, name='dashboard'),
+    path('criar-conta/', usuario.registro, name='registro'),
+    path('entrar/', auth_views.LoginView.as_view(template_name='pages/login.html'), name='login'),
+    path('sair/', auth_views.LogoutView.as_view(), name='logout'),
+    path('meu-perfil/', pages.perfil, name='perfil'),
     # Torneios
     path('torneios', torneios.ListaTorneios, name ="torneios_ListaTorneios"),
     path('torneios/adicionarTorneios', torneios.CadastroTorneios, name='torneios_adicionarTorneios'),
     path('torneios/EditarTorneios/<id>', torneios.EditarTorneios, name='torneios_EditarTorneios'),
     path('torneios/ExcluirTorneios/<id>', torneios.ExcluirTorneios, name="torneios_ExcluirTorneios"),
+    path('torneios/<int:id>/suico/', torneios.SistemaSuico, name='torneios_suico'),
     # Usuários
     path('usuarios', usuario.lista, name = "usuarios_lista"),
     path('usuarios/adicionar', usuario.CadastroUsuario, name= 'usuarios_adicionar'),
