@@ -2,3 +2,7 @@ Django==5.2.18
 django-widget-tweaks==1.5.1
 PyMySQL[rsa]==1.1.2
 networkx==3.5
+gunicorn>=23,<24
+whitenoise>=6.9,<7
+dj-database-url>=3,<4
+psycopg[binary]>=3.2,<4
